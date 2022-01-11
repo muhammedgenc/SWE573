@@ -1,0 +1,55 @@
+{% extends 'landing/base.html' %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+<center>
+    <br/><br>
+    {% if user.profile.userName %}
+       <h1 class="py-4">Hello {{ user.profile.userName }}</h3> 
+    {% else %}
+      <h1 class="py-4">Hello {{ user.username }} </h3>
+    {% endif %}
+    <br/><br>
+   
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card w-75 h-100">
+            <div class="card-body">
+                <h5 class="card-title">Services</h5>
+                <p class="card-text">ServiTel offers a wide range of Services.</p>
+                <a href="{% url 'service-list' %}" class="btn btn-dark">List of Services</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card w-75 h-100">
+            <div class="card-body">
+                <h5 class="card-title">Events</h5>
+                <p class="card-text">ServiTel offers a wide range of Events.</p>
+                <a href="{% url 'event-list' %}" class="btn btn-dark">List of Events</a>
+            </div>
+        </div>
+    </div>
+</div>
+</center>
+
+{% else %}
+
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-10 col-sm-12 text-center">
+            <h3 class="mt-2 lead display-4">All the Services and Events you need!</h3>
+            <p class="mt-2 lead">Wanna give some service to other people? Looking for some service?</p>
+            <p class="mt-2 lead">Or do you want to get socialized with Events?</p>
+            <h3 class="mt-5 lead display-3">Welcome to ServiTel!</p>
+            <div class="d-flex justify-content-center mt-5">
+                <a href="{% url 'account_login' %}" class="btn btn-light mr-2">Log In</a>
+                <a href="{% url 'account_signup' %}" class="btn btn-dark">Register</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endif%}
+{% endblock content %}

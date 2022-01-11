@@ -1,0 +1,30 @@
+{% extends 'landing/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center mt-3">
+        <div class="col-md-5 col-sm-12 border-bottom">
+            <a href="{% url 'service-create' %}" class="btn btn-light mr-2">Add a Service!</a>
+            <a href="{% url 'event-list' %}" class="btn btn-light mr-2">Go to Events</a>
+            <a href="{% url 'index' %}" class="btn btn-light mr-2">Home</a>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-3 mb-3">
+        <div class="col-md-5 col-sm-12 border-bottom">
+            <a>Here are some Services for you {{ request.user }}! </a>
+        </div>
+    </div>
+
+    {% for service in service_list %}
+    <div class="row justify-content-center mt-3">
+        <div class="col-md-5 col-sm-12 border-bottom position-relative">
+            <p><strong>{{ service.author }}</strong> {{ service.created_on }}</p>
+            <p>{{ service.name }}</p>
+            <p>{{ service.service_date }}  {{ service.service_time }}</p>
+            <a href="{% url 'service-detail' service.pk %}" class="stretched-link"></a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %}

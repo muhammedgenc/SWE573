@@ -1,0 +1,65 @@
+{% extends 'landing/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-5 col-sm-6">
+            <a href="{% url 'service-list' %}" class="btn btn-light">Back to Feed</a>
+        </div>
+    </div>
+
+    <div class="row justify-content-center mt-3">
+        <div class="col-md-5 col-sm-12 border-bottom">
+            <p><strong>Service Provider: </strong> <a href="{% url 'profile' service.author.profile.pk %}">{{ service.author }}</a>
+                {% if request.user == service.author %}
+                <a href="{% url 'service-edit' service.pk %}" style="color: #333;"><i class="far fa-edit"></i></a>
+                <a href="{% url 'service-delete' service.pk %}" style="color: #333;"><i class="fas fa-trash"></i></a>
+                {% endif %}
+            </p>
+            <p><img src="{{ service.picture.url }}"></img></p>
+            <p><strong>Service Name: </strong>{{ service.name }}</p>
+            <p><strong>Description: </strong>{{ service.description }}</p>
+            <p><strong>Duration: </strong>{{ service.duration }}</p>
+            <p><strong>Category: </strong>{{ service.category }}</p>           
+            <p><strong>Date: </strong>{{ service.service_date }}</p>
+            <p><strong>Time: </strong>{{ service.service_time }}</p>
+            <p><strong>Service Capacity: </strong>{{ service.capacity }}</p>            
+
+            {% if request.user != service.author %}
+            <form method="POST">
+                {% csrf_token %}
+                {{ form | crispy}}
+                <div class="d-grid gap-2">
+                    <button class="btn btn-dark mt-3 mb-2">Apply</button>
+                </div>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row justify-content-center mt-3">
+        <div class="col-md-5 col-sm-12 border-bottom">
+            <h5>Applicants</h5>
+        </div>
+    </div>
+    {% for application in applications %}
+    <div class="row justify-content-center mt-3">
+        <div class="col-md-5 col-sm-12 border-bottom">
+            <p>{{ application.applicant }} 
+                {% if application.is_approved == True %}
+                    <a> - Approved </a>
+                {% else %}
+                    <a> - Pending </a>
+                {% endif %}
+                {% if request.user == application.applicant %}
+                    <a href="{% url 'application-delete' service.pk application.pk %}" style="color: #333;"><i class="fas fa-trash"></i></a>
+                {% endif %}
+                {% if request.user == service.author %}
+                    <a href="{% url 'application-approve' service.pk application.pk %}" style="color: #333;"><i class="fas fa-edit"></i></a>
+                {% endif %}
+            </p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %}

@@ -1,0 +1,57 @@
+{% extends 'landing/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-5 col-sm-6">
+            <a href="{% url 'event-list' %}" class="btn btn-light">Back to Feed</a>
+        </div>
+    </div>
+
+    <div class="row justify-content-center mt-3">
+        <div class="col-md-5 col-sm-12 border-bottom">
+            <p><strong>Event Organizer: </strong> <a href="{% url 'profile' event.author.profile.pk %}">{{ event.author }}</a>
+                {% if request.user == event.author %}
+                <a href="{% url 'event-edit' event.pk %}" style="color: #333;"><i class="far fa-edit"></i></a>
+                <a href="{% url 'event-delete' event.pk %}" style="color: #333;"><i class="fas fa-trash"></i></a>
+                {% endif %}
+            </p>
+            <p><img src="{{ event.picture.url }}"></img></p>
+            <p><strong>Event Name: </strong>{{ event.name }}</p>
+            <p><strong>Description: </strong>{{ event.description }}</p>
+            <p><strong>Duration: </strong>{{ event.duration }}</p>
+            <p><strong>Category: </strong>{{ event.category }}</p>           
+            <p><strong>Date: </strong>{{ event.event_date }}</p>
+            <p><strong>Time: </strong>{{ event.event_time }}</p>
+            <p><strong>Event Capacity: </strong>{{ event.capacity }}</p>            
+
+            {% if request.user != event.author %}
+            <form method="POST">
+                {% csrf_token %}
+                {{ form | crispy}}
+                <div class="d-grid gap-2">
+                    <button class="btn btn-dark mt-3 mb-2">Apply</button>
+                </div>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row justify-content-center mt-3">
+        <div class="col-md-5 col-sm-12 border-bottom">
+            <h5>Participants</h5>
+        </div>
+    </div>
+    {% for eventapplication in eventapplications %}
+    <div class="row justify-content-center mt-3">
+        <div class="col-md-5 col-sm-12 border-bottom">
+            <p>{{ eventapplication.applicant }} 
+                {% if request.user == eventapplication.applicant %}
+                    <a href="{% url 'eventapplication-delete' event.pk eventapplication.pk %}" style="color: #333;"><i class="fas fa-trash"></i></a>
+                {% endif %}
+            </p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %}
